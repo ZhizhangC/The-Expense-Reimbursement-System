@@ -73,10 +73,10 @@ public class ReimbursementService {
         User user = userDAO.getById(pid);
         List<Reimbursement> returnedReimbursement = reimbursementDAO.getPendingReimbursementsByUser(user);
         if (returnedReimbursement.isEmpty()){
-            System.out.println("No Resolved Reimbursement with user id: " + pid);
+            System.out.println("No Pending Reimbursement with user id: " + pid);
 //            throw new ReimbursementNotFoundException("No Resolved Reimbursement with user id: " + pid);
         } else{
-            System.out.println("Resolved Reimbursements with user id: " + pid);
+            System.out.println("Pending Reimbursements with user id: " + pid);
             System.out.println(returnedReimbursement);
         }
         return returnedReimbursement;

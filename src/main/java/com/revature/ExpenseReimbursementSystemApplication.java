@@ -36,21 +36,31 @@ public class ExpenseReimbursementSystemApplication implements CommandLineRunner 
 
 //		Role role1 = new Role(1, "Employee");
 //		Role role2 = new Role(2, "Finance Manager");
-//		Status status = new Status(3, "Pending");
-//		User user1 = new User(2, "Mario", "Mario", role1, "MM_R", "fjkld");
-//		User user2 = new User(3, "Luigi", "Mario", role2, "LM_R", "fjdfkld");
-//		Reimbursement r1 = new Reimbursement(0, 8000, "First Reimbursement", user1, status);
+//		Status status1 = new Status(1, "Approved");
+//		Status status2 = new Status(2, "Denied");
+//		Status status3 = new Status(3, "Pending");
+//		User user1 = new User(1, "Mario", "Mario", role1, "MM_R", "fjkld");
+//		User user2 = new User(2, "Luigi", "Mario", role2, "LM_R", "fjdfkld");
+//		Reimbursement r1 = new Reimbursement(0, 5700, "First Reimbursement", user2, status1);
+//		Reimbursement r2 = new Reimbursement(0, 1300, "Second Reimbursement", user2, status3);
+//		Reimbursement r3 = new Reimbursement(0, 3500, "Third Reimbursement", user1, status3);
 //
 //		roleService.addRole(role1);
 //		roleService.addRole(role2);
-//		statusService.addStatus(status);
+//		statusService.addStatus(status1);
+//		statusService.addStatus(status2);
+//		statusService.addStatus(status3);
 //		userService.createUser(user1);
+//		userService.createUser(user2);
 //		reimbursementService.createReimbursement(r1);
+//		reimbursementService.createReimbursement(r2);
+//		reimbursementService.createReimbursement(r3);
 //		reimbursementService.approveReimbursement(1);
 //		reimbursementService.denyReimbursement(1);
+//		reimbursementService.getAllPendingReimbursements();
 //		reimbursementService.getAllResolvedReimbursements();
-		reimbursementService.getResolvedReimbursementsByPerson(3);
-		reimbursementService.getPendingReimbursementsByPerson(2);
+		reimbursementService.getResolvedReimbursementsByPerson(2);
+		reimbursementService.getPendingReimbursementsByPerson(1);
 //		roleService.deleteRole(1);
 //		roleService.deleteRole(2);
 //		statusService.deleteStatus(1);
