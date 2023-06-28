@@ -1,13 +1,10 @@
 package com.revature.services;
 
 import com.revature.daos.ReimbursementDAO;
-import com.revature.daos.RoleDAO;
 import com.revature.daos.StatusDAO;
 import com.revature.daos.UserDAO;
 import com.revature.exceptions.ReimbursementNotFoundException;
-import com.revature.exceptions.UserNotFoundException;
 import com.revature.models.Reimbursement;
-import com.revature.models.Role;
 import com.revature.models.Status;
 import com.revature.models.User;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +21,14 @@ import java.util.Optional;
 public class ReimbursementService {
     private final ReimbursementDAO reimbursementDAO;
     private final StatusDAO statusDAO;
-
+    private final UserDAO userDAO;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    public ReimbursementService(ReimbursementDAO reimbursementDAO, StatusDAO statusDAO) {
+    public ReimbursementService(ReimbursementDAO reimbursementDAO, StatusDAO statusDAO, UserDAO userDAO) {
         this.reimbursementDAO = reimbursementDAO;
         this.statusDAO = statusDAO;
+        this.userDAO = userDAO;
     }
 
     public Reimbursement createReimbursement(Reimbursement r){
@@ -64,21 +62,66 @@ public class ReimbursementService {
         }
     }
 
-    public List<Reimbursement> searchReimbursements(String searchPattern) {
-        return reimbursementDAO.findByNameContainingIgnoreCase(searchPattern);
+//    public List<Reimbursement> searchReimbursements(String searchPattern) {
+//        return reimbursementDAO.findByDescriptionContainingIgnoreCase(searchPattern);
+//    }
+
+//    public List<Reimbursement> getReimbursementsByPerson(int pid) {
+//        return reimbursementDAO.getReimbursementsByUser(pid);
+//    }
+    public List<Reimbursement> getPendingReimbursementsByPerson(int pid) {
+        User user = userDAO.getById(pid);
+        List<Reimbursement> returnedReimbursement = reimbursementDAO.getPendingReimbursementsByUser(user);
+        if (returnedReimbursement.isEmpty()){
+            System.out.println("No Resolved Reimbursement with user id: " + pid);
+//            throw new ReimbursementNotFoundException("No Resolved Reimbursement with user id: " + pid);
+        } else{
+            System.out.println("Resolved Reimbursements with user id: " + pid);
+            System.out.println(returnedReimbursement);
+        }
+        return returnedReimbursement;
     }
 
-    public List<Reimbursement> getReimbursementsByPerson(int pid) {
-        return reimbursementDAO.getReimbursementsByUser(pid);
+    public List<Reimbursement> getResolvedReimbursementsByPerson(int pid) {
+        User user = userDAO.getById(pid);
+        List<Reimbursement> returnedReimbursement = reimbursementDAO.getResolvedReimbursementsByUser(user);
+        if (returnedReimbursement.isEmpty()){
+            System.out.println("No Resolved Reimbursement with user id: " + pid);
+//            throw new ReimbursementNotFoundException("No Resolved Reimbursement with user id: " + pid);
+        } else{
+            System.out.println("Resolved Reimbursements with user id: " + pid);
+            System.out.println(returnedReimbursement);
+        }
+        return returnedReimbursement;
     }
 
     public List<Reimbursement> getAllPendingReimbursements() {
-        return reimbursementDAO.getAllPendingReimbursements();
+        List<Reimbursement> returnedReimbursement = reimbursementDAO.getAllPendingReimbursements();
+        if (returnedReimbursement.isEmpty()){
+            System.out.printf("No Pending Reimbursement.");
+//            throw new ReimbursementNotFoundException("No Pending Reimbursement.");
+        } else{
+            System.out.println("Pending Reimbursements: ");
+            System.out.println(returnedReimbursement);
+        }
+        return returnedReimbursement;
+    }
+
+    public List<Reimbursement> getAllResolvedReimbursements() {
+        List<Reimbursement> returnedReimbursement = reimbursementDAO.getAllResolvedReimbursements();
+        if (returnedReimbursement.isEmpty()){
+            System.out.printf("No Resolved Reimbursement.");
+//            throw new ReimbursementNotFoundException("No Resolved Reimbursement.");
+        } else{
+            System.out.println("Resolved Reimbursements: ");
+            System.out.println(returnedReimbursement);
+        }
+        return returnedReimbursement;
     }
 
     public boolean approveReimbursement(int id) {
         Optional<Reimbursement> optionalReimbursement = reimbursementDAO.findById(id);
-        Status status = statusDAO.getReferenceById(2);
+        Status status = statusDAO.getReferenceById(1);
         if (optionalReimbursement.isPresent()) {
             Reimbursement reimbursement = optionalReimbursement.get();
             System.out.println(reimbursement);
@@ -90,7 +133,7 @@ public class ReimbursementService {
 
     public boolean denyReimbursement(int id) {
         Optional<Reimbursement> optionalReimbursement = reimbursementDAO.findById(id);
-        Status status = statusDAO.getReferenceById(3);
+        Status status = statusDAO.getReferenceById(2);
         if (optionalReimbursement.isPresent()) {
             Reimbursement reimbursement = optionalReimbursement.get();
             System.out.println(reimbursement);

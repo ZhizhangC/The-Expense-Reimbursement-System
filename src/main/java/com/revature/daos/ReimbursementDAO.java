@@ -1,5 +1,6 @@
 package com.revature.daos;
 import com.revature.models.Reimbursement;
+import com.revature.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.Query;
@@ -11,18 +12,33 @@ import java.util.List;
 
 @Repository
 public interface ReimbursementDAO extends JpaRepository<Reimbursement, Integer> {
-    List<Reimbursement> findByNameContainingIgnoreCase(String pattern);
+//    @Query("FROM Reimbursement WHERE LOWER(description) LIKE (%:pattern%) ")
+//    List<Reimbursement> findByDescriptionContainingIgnoreCase(String pattern);
 
-    @Query("SELECT r FROM Reimbursement r WHERE r.user_id = :id")
-    List<Reimbursement> getReimbursementsByUser(@Param("id") int id);
+//    @Query("SELECT r FROM Reimbursement r WHERE r.user_id = :id")
+//    List<Reimbursement> getReimbursementsByUser(@Param("id") int id);
 
-    @Query("SELECT r FROM Reimbursement r JOIN Status s ON r.status = s.id WHERE s.name = 'Pending'")
+
+
+//    @Query("SELECT r.* FROM Reimbursement r JOIN Status s ON r.status_id = s.id WHERE r.user_id = User.:id AND s.name = 'Pending'")
+    @Query("FROM Reimbursement r WHERE r.status_id = 3 AND r.user_id = :id")
+    List<Reimbursement> getPendingReimbursementsByUser(@Param("id") User id);
+
+//    @Query("SELECT r.* FROM Reimbursement r JOIN Status s ON r.status_id = s.id WHERE r.user_id = User.:id AND s.name = 'Denied' OR s.name = 'Approved'")
+    @Query("FROM Reimbursement r WHERE (r.status_id = 1 OR r.status_id = 2) AND r.user_id = :id")
+    List<Reimbursement> getResolvedReimbursementsByUser(@Param("id") User id);
+
+
+    @Query("FROM Reimbursement r WHERE r.status_id = 3")
     List<Reimbursement> getAllPendingReimbursements();
 
-    @Query("UPDATE Reimbursement r SET r.status = 2 WHERE r.id = :id")
+    @Query("FROM Reimbursement r WHERE r.status_id = 1 OR r.status_id = 2")
+    List<Reimbursement> getAllResolvedReimbursements();
+
+    @Query("UPDATE Reimbursement r SET r.status_id = 1 WHERE r.id = :id")
     boolean approveReimbursement(@Param("id") int id);
 
-    @Query("UPDATE Reimbursement r SET r.status = 3 WHERE r.id = :id")
+    @Query("UPDATE Reimbursement r SET r.status_id = 2 WHERE r.id = :id")
     boolean denyReimbursement(@Param("id") int id);
 
 }

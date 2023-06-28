@@ -33,10 +33,15 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping
-    public User createUserHandler(@RequestBody User u){
+    @GetMapping("{username}") // /users/id
+    public User getUserByUsernameHandler(@PathVariable("username") String u){
 
-        return userService.createUser(u);
+        return userService.findUserByUsername(u);
+    }
+
+    @PostMapping
+    public void createUserHandler(@RequestBody User u){
+        userService.createUser(u);
     }
 
     @PutMapping("{id}")

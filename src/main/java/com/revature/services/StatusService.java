@@ -3,12 +3,14 @@ package com.revature.services;
 import com.revature.daos.StatusDAO;
 import com.revature.exceptions.StatusNotFoundException;
 import com.revature.models.Status;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class StatusService {
     private final StatusDAO statusDao;
 
@@ -24,9 +26,11 @@ public class StatusService {
         if (returnedStatus.getId() > 0){
             // Successful
             // TODO put success log
+            log.info("Status created");
         } else{
             // This was a failure to add the course
             // TODO put warning log
+            log.warn("Status adding failed");
         }
 
         return returnedStatus;
