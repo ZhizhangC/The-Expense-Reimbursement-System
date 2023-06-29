@@ -3,6 +3,7 @@ package com.revature.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,12 +41,13 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.PUT).hasAuthority("Finance Manager")
                 .antMatchers("/auth/**").permitAll()
 //                .antMatchers("/pending").hasAuthority("Finance Manager")
 //                .antMatchers("reimbursements/pending/**").hasAuthority("Employee")
 //                .antMatchers("reimbursements/resolved/**").hasAuthority("Employee")
-//                .antMatchers("reimbursements/users/pending").hasAuthority(("Finance Manager"))
-//                .antMatchers("reimbursements/users/resolved").hasAuthority(("Finance Manager"))
+                .antMatchers("users/pending").hasAuthority("Finance Manager")
+                .antMatchers("users/resolved").hasAuthority("Finance Manager")
 //                .antMatchers("reimbursements/approve").hasAuthority(("Finance Manager"))
 //                .antMatchers("reimbursements/deny").hasAuthority(("Finance Manager"))
                 .and()
