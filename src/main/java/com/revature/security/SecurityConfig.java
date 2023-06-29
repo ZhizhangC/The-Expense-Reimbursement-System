@@ -7,28 +7,51 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthEntryPoint jwtAuthEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.customUserDetailsService = customUserDetailsService;
+        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
-                .anyRequest().permitAll()
+                .antMatchers("/auth/**").permitAll()
+//                .antMatchers("/pending").hasAuthority("Finance Manager")
+//                .antMatchers("reimbursements/pending/**").hasAuthority("Employee")
+//                .antMatchers("reimbursements/resolved/**").hasAuthority("Employee")
+//                .antMatchers("reimbursements/users/pending").hasAuthority(("Finance Manager"))
+//                .antMatchers("reimbursements/users/resolved").hasAuthority(("Finance Manager"))
+//                .antMatchers("reimbursements/approve").hasAuthority(("Finance Manager"))
+//                .antMatchers("reimbursements/deny").hasAuthority(("Finance Manager"))
                 .and()
                 .httpBasic();
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

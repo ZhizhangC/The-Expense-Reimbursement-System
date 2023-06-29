@@ -47,12 +47,12 @@ public class ReimbursementController {
         return reimbursementService.getAllReimbursement();
     }
 
-    @GetMapping("/pending")
+    @GetMapping("users/pending")
     public List<Reimbursement> getAllPendingReimbursementsHandler() {
         return reimbursementService.getAllPendingReimbursements();
     }
 
-    @GetMapping("/resolved")
+    @GetMapping("users/resolved")
     public List<Reimbursement> getAllResolvedReimbursementsHandler() {
         return reimbursementService.getAllResolvedReimbursements();
     }
@@ -73,8 +73,8 @@ public class ReimbursementController {
 ////    }
 
     @PostMapping("{id}")
-    public Reimbursement createReimbursementByUserHandler(@RequestParam int a, @RequestParam String s, @PathVariable("id") int id){
-        return reimbursementService.createReimbursementByUser(a, s, id);
+    public void createReimbursementByUserHandler(@RequestParam int a, @RequestParam String s, @PathVariable("id") int id){
+        reimbursementService.createReimbursementByUser(a, s, id);
     }
 //
 //    @PostMapping
@@ -94,12 +94,12 @@ public class ReimbursementController {
 //        return reimbursementService.updateReimbursement(r);
 //    }
 //
-    @PutMapping("{id}/approve")
+    @PutMapping("approve/{id}")
     public boolean approveReimbursementHandler(@PathVariable("id") int id) {
         return reimbursementService.approveReimbursement(id);
     }
 //
-    @PutMapping("{id}/deny")
+    @PutMapping("deny/{id}")
     public boolean denyReimbursementHandler(@PathVariable("id") int id) {
         return reimbursementService.denyReimbursement(id);
     }

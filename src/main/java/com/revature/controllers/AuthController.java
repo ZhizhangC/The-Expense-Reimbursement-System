@@ -3,10 +3,12 @@ package com.revature.controllers;
 
 import com.revature.daos.RoleDAO;
 import com.revature.daos.UserDAO;
+import com.revature.dto.AuthResponseDTO;
 import com.revature.dto.LoginDTO;
 import com.revature.dto.RegisterDTO;
 import com.revature.models.MyUser;
 import com.revature.models.Role;
+import com.revature.security.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +30,16 @@ public class AuthController {
     private final RoleDAO roleDao;
     private final PasswordEncoder passwordEncoder;
 
+    private final JwtGenerator jwtGenerator;
+
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, UserDAO userDao, RoleDAO roleDao,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder, JwtGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
         this.userDao = userDao;
         this.roleDao = roleDao;
         this.passwordEncoder = passwordEncoder;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @PostMapping("register")
@@ -63,13 +68,16 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User successfully signed in.", HttpStatus.OK);
+
+        String token = jwtGenerator.generateToken(authentication);
+
+        return new ResponseEntity<AuthResponseDTO>(new AuthResponseDTO(token), HttpStatus.OK);
     }
 
 
