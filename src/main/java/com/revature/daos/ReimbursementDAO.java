@@ -1,6 +1,6 @@
 package com.revature.daos;
+import com.revature.models.MyUser;
 import com.revature.models.Reimbursement;
-import com.revature.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.Query;
@@ -20,13 +20,13 @@ public interface ReimbursementDAO extends JpaRepository<Reimbursement, Integer> 
 
 
 
-//    @Query("SELECT r.* FROM Reimbursement r JOIN Status s ON r.status_id = s.id WHERE r.user_id = User.:id AND s.name = 'Pending'")
+//    @Query("SELECT r.* FROM Reimbursement r JOIN Status s ON r.status_id = s.id WHERE r.user_id = MyUser.:id AND s.name = 'Pending'")
     @Query("FROM Reimbursement r WHERE r.status_id = 3 AND r.user_id = :id")
-    List<Reimbursement> getPendingReimbursementsByUser(@Param("id") User id);
+    List<Reimbursement> getPendingReimbursementsByUser(@Param("id") MyUser id);
 
-//    @Query("SELECT r.* FROM Reimbursement r JOIN Status s ON r.status_id = s.id WHERE r.user_id = User.:id AND s.name = 'Denied' OR s.name = 'Approved'")
+//    @Query("SELECT r.* FROM Reimbursement r JOIN Status s ON r.status_id = s.id WHERE r.user_id = MyUser.:id AND s.name = 'Denied' OR s.name = 'Approved'")
     @Query("FROM Reimbursement r WHERE (r.status_id = 1 OR r.status_id = 2) AND r.user_id = :id")
-    List<Reimbursement> getResolvedReimbursementsByUser(@Param("id") User id);
+    List<Reimbursement> getResolvedReimbursementsByUser(@Param("id") MyUser id);
 
 
     @Query("FROM Reimbursement r WHERE r.status_id = 3")

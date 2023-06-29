@@ -4,9 +4,9 @@ import com.revature.daos.ReimbursementDAO;
 import com.revature.daos.StatusDAO;
 import com.revature.daos.UserDAO;
 import com.revature.exceptions.ReimbursementNotFoundException;
+import com.revature.models.MyUser;
 import com.revature.models.Reimbursement;
 import com.revature.models.Status;
-import com.revature.models.User;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +31,15 @@ public class ReimbursementService {
         this.userDAO = userDAO;
     }
 
-    public Reimbursement createReimbursement(Reimbursement r){
-        Reimbursement returnedReimbursement = reimbursementDAO.save(r);
+    public Reimbursement createReimbursementByUser(int a, String s, int id){
+        Reimbursement returnedReimbursement = new Reimbursement();
+        returnedReimbursement.setAmount(a);
+        returnedReimbursement.setDescription(s);
+        MyUser user = userDAO.getById(id);
+        Status status = statusDAO.getReferenceById(3);
+        returnedReimbursement.setUser_id(user);
+        returnedReimbursement.setStatus_id(status);
+        reimbursementDAO.save(returnedReimbursement);
         if(returnedReimbursement.getId()>0){
             log.info("Reimbursement created");
         }else{
@@ -70,7 +77,7 @@ public class ReimbursementService {
 //        return reimbursementDAO.getReimbursementsByUser(pid);
 //    }
     public List<Reimbursement> getPendingReimbursementsByPerson(int pid) {
-        User user = userDAO.getById(pid);
+        MyUser user = userDAO.getById(pid);
         List<Reimbursement> returnedReimbursement = reimbursementDAO.getPendingReimbursementsByUser(user);
         if (returnedReimbursement.isEmpty()){
             System.out.println("No Pending Reimbursement with user id: " + pid);
@@ -83,7 +90,7 @@ public class ReimbursementService {
     }
 
     public List<Reimbursement> getResolvedReimbursementsByPerson(int pid) {
-        User user = userDAO.getById(pid);
+        MyUser user = userDAO.getById(pid);
         List<Reimbursement> returnedReimbursement = reimbursementDAO.getResolvedReimbursementsByUser(user);
         if (returnedReimbursement.isEmpty()){
             System.out.println("No Resolved Reimbursement with user id: " + pid);
@@ -142,4 +149,5 @@ public class ReimbursementService {
         }
         return true;
     }
+
 }

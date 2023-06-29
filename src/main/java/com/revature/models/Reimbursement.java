@@ -24,7 +24,7 @@ public class Reimbursement {
 
     @ManyToOne
     @JoinColumn(name = "user_id_fk")
-    private User user_id;
+    private MyUser user_id;
 
     @ManyToOne
     @JoinColumn(name = "status_id_fk")
