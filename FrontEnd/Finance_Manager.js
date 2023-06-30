@@ -3,8 +3,15 @@ let loggedInUser = parseJwt(document.cookie)
 console.log(loggedInUser) 
 
 
-document.getElementById("greeting").innerText = "Welcome " + loggedInUser.sub + ", " + loggedInUser.Role + " " + loggedInUser.Id + " " + loggedInUser.FirstName + " " + loggedInUser.LastName
+// document.getElementById("greeting").innerText = "Welcome " + loggedInUser.sub + ", " + loggedInUser.Role + " " + loggedInUser.Id + " " + loggedInUser.FirstName + " " + loggedInUser.LastName
+var text = document.createTextNode("Welcome " + loggedInUser.sub + ", " + loggedInUser.Role + " " + loggedInUser.Id + " " + loggedInUser.FirstName + " " + loggedInUser.LastName + " ")
+var icon = document.createElement("i")
+icon.classList.add("fa", "fa-sun-o")
+icon.style.color = 888
 
+var greeting = document.getElementById("greeting");
+greeting.appendChild(text);
+greeting.appendChild(icon);
 
 const url = "http://localhost:8080/"
 
