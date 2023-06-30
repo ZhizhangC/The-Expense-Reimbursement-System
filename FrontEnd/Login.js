@@ -64,7 +64,7 @@ async function register() {
         console.error("Registration error:", error);
         document.getElementById("header").innerHTML = "Register Failed!! Try again...";
     } finally {
-        alert("yo");
+        
     }
 }
 
@@ -108,7 +108,7 @@ async function login(){
 
     })
     .catch((error) => {document.getElementById("header").innerHTML = "Login Failed! Try again..."})
-    .finally(() => alert("hi"))
+    .finally()
 
 }
 
