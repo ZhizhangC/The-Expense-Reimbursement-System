@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("statuses")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class StatusController {
     private final StatusService statusService;
 

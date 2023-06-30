@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("reimbursements")
+//@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class ReimbursementController {
     private final ReimbursementService reimbursementService;
     private final StatusDAO statusDAO;
@@ -47,12 +48,12 @@ public class ReimbursementController {
         return reimbursementService.getAllReimbursement();
     }
 
-    @GetMapping("users/pending")
+    @GetMapping("/users/pending")
     public List<Reimbursement> getAllPendingReimbursementsHandler() {
         return reimbursementService.getAllPendingReimbursements();
     }
 
-    @GetMapping("users/resolved")
+    @GetMapping("/users/resolved")
     public List<Reimbursement> getAllResolvedReimbursementsHandler() {
         return reimbursementService.getAllResolvedReimbursements();
     }
@@ -72,7 +73,7 @@ public class ReimbursementController {
 ////        return reimbursementService.getReimbursementsByPerson(id);
 ////    }
 
-    @PostMapping("{id}")
+    @PostMapping("/create/{id}")
     public void createReimbursementByUserHandler(@RequestParam int a, @RequestParam String s, @PathVariable("id") int id){
         reimbursementService.createReimbursementByUser(a, s, id);
     }
@@ -94,12 +95,12 @@ public class ReimbursementController {
 //        return reimbursementService.updateReimbursement(r);
 //    }
 //
-    @PutMapping("approve/{id}")
+    @PutMapping("/approve/{id}")
     public boolean approveReimbursementHandler(@PathVariable("id") int id) {
         return reimbursementService.approveReimbursement(id);
     }
 //
-    @PutMapping("deny/{id}")
+    @PutMapping("/deny/{id}")
     public boolean denyReimbursementHandler(@PathVariable("id") int id) {
         return reimbursementService.denyReimbursement(id);
     }

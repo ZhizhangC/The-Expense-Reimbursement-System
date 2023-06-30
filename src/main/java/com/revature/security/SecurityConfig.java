@@ -13,9 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
 @EnableWebSecurity
+//@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
@@ -41,15 +43,15 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.PUT).hasAuthority("Finance Manager")
                 .antMatchers("/auth/**").permitAll()
 //                .antMatchers("/pending").hasAuthority("Finance Manager")
-//                .antMatchers("reimbursements/pending/**").hasAuthority("Employee")
-//                .antMatchers("reimbursements/resolved/**").hasAuthority("Employee")
-                .antMatchers("users/pending").hasAuthority("Finance Manager")
-                .antMatchers("users/resolved").hasAuthority("Finance Manager")
-//                .antMatchers("reimbursements/approve").hasAuthority(("Finance Manager"))
-//                .antMatchers("reimbursements/deny").hasAuthority(("Finance Manager"))
+//                .antMatchers(HttpMethod.POST,"/reimbursements/create/**").hasAuthority("Employee")
+//                .antMatchers(HttpMethod.GET,"/reimbursements/pending/**").hasAuthority("Employee")
+//                .antMatchers(HttpMethod.GET,"/reimbursements/resolved/**").hasAuthority("Employee")
+//                .antMatchers(HttpMethod.GET,"/reimbursements/users/pending/**").hasAuthority("Finance Manager")
+//                .antMatchers(HttpMethod.GET,"/reimbursements/users/resolved").hasAuthority("Finance Manager")
+//                .antMatchers(HttpMethod.PUT,"/reimbursements/approve/**").hasAuthority("Finance Manager")
+//                .antMatchers(HttpMethod.PUT,"/reimbursements/deny/**").hasAuthority("Finance Manager")
                 .and()
                 .httpBasic();
 
