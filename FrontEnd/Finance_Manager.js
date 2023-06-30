@@ -9,7 +9,13 @@ document.getElementById("greeting").innerText = "Welcome " + loggedInUser.sub + 
 const url = "http://localhost:8080/"
 
 window.onload = async function(){
-    await fetch(url + "reimbursements/users/pending")
+    await fetch(url + "reimbursements/users/pending", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + document.cookie
+        }
+     })
     .then((response) => response.json())
     .then((data) => {
         console.log(data)
@@ -46,7 +52,13 @@ window.onload = async function(){
             });
         }
     })
-    await fetch(url + "reimbursements/users/resolved")
+    await fetch(url + "reimbursements/users/resolved", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + document.cookie
+        }
+     })
     .then((response) => response.json())
     .then((data) => {
         console.log(data);
